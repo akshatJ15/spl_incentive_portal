@@ -10,6 +10,7 @@ import clientRouter from "./routes/client.js";
 import adminDashboardRouter from "./routes/adminDashboard.js";
 
 // Load environment variables from .env file
+
 dotenv.config();
 
 async function startServer() {
