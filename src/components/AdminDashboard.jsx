@@ -276,16 +276,18 @@ export default function AdminDashboard() {
             top: 0 !important;
             width: 100% !important;
             display: grid !important;
-            grid-template-columns: repeat(4, 1fr) !important;
-            gap: 20px !important;
+            grid-template-columns: repeat(auto-fill, 2in) !important;
+            gap: 15px !important;
             padding: 10px !important;
             margin: 0 !important;
           }
           .qr-print-card {
+            width: 2in !important;
+            height: 2in !important;
             page-break-inside: avoid !important;
             break-inside: avoid !important;
             border: 1px dashed #cccccc !important;
-            padding: 12px !important;
+            padding: 8px !important;
             border-radius: 8px !important;
             background-color: #ffffff !important;
             display: flex !important;
@@ -293,6 +295,28 @@ export default function AdminDashboard() {
             align-items: center !important;
             justify-content: center !important;
             box-shadow: none !important;
+          }
+          .qr-print-card .qr-print-svg {
+            width: 96px !important;
+            height: 96px !important;
+            flex: 0 0 auto !important;
+          }
+          .qr-print-card .qr-print-points {
+            font-size: 10px !important;
+            padding: 1px 8px !important;
+            margin-top: 6px !important;
+            line-height: 1.1 !important;
+          }
+          .qr-print-card .qr-print-id {
+            font-size: 6px !important;
+            margin-top: 4px !important;
+            width: 100% !important;
+            line-height: 1.1 !important;
+          }
+          .qr-print-card .qr-print-label {
+            font-size: 7px !important;
+            margin-top: 4px !important;
+            line-height: 1.1 !important;
           }
         }
       `}} />
@@ -548,19 +572,19 @@ export default function AdminDashboard() {
                 <div key={uid} className="qr-print-card">
                   <QRCodeSVG
                     value={claimUrl}
-                    size={140}
+                    size={96}
                     level="H"
                     includeMargin={true}
-                    className="mx-auto"
+                    className="mx-auto qr-print-svg"
                   />
                   <div className="text-center mt-2.5">
-                    <span style={{ fontSize: '14px', fontWeight: 'bold', fontFamily: 'monospace', display: 'inline-block', padding: '2px 10px', background: '#fef3c7', border: '1px solid #fde68a', borderRadius: '9999px', color: '#b45309' }}>
+                    <span className="qr-print-points" style={{ fontWeight: 'bold', fontFamily: 'monospace', display: 'inline-block', background: '#fef3c7', border: '1px solid #fde68a', borderRadius: '9999px', color: '#b45309' }}>
                       ★ {generatedPoints} PTS
                     </span>
-                    <p style={{ fontSize: '8px', color: '#6b7280', fontFamily: 'monospace', marginTop: '6px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', width: '130px' }}>
+                    <p className="qr-print-id" style={{ color: '#6b7280', fontFamily: 'monospace', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                       ID: {uid}
                     </p>
-                    <p style={{ fontSize: '9px', fontWeight: 'bold', color: '#374151', marginTop: '6px', textTransform: 'uppercase' }}>
+                    <p className="qr-print-label" style={{ fontWeight: 'bold', color: '#374151', textTransform: 'uppercase' }}>
                       Scan to Claim Points
                     </p>
                   </div>
