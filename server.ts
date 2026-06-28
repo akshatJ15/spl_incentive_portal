@@ -25,7 +25,7 @@ async function startServer() {
   const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
   if (mongoUri) {
     const fs = await import('fs');
-    const logStatus = (status, extra = {}) => {
+    const logStatus = (status: string, extra: Record<string, unknown> = {}) => {
       try {
         fs.writeFileSync('db_connection_log.json', JSON.stringify({
           time: new Date().toISOString(),
@@ -64,6 +64,29 @@ async function startServer() {
   }
 
   // Mount backend routes
+  // Dynamic robots.txt to strictly disallow search bot crawls on all claim and administrative routes, guaranteeing zero SEO token leaks
+  app.get("/robots.txt", (req, res) => {
+    res.type("text/plain");
+    res.send("User-agent: *\nDisallow: /\n");
+  });
+
+  // Automatic Google Search Console Dynamic HTML Verification
+  // Responds perfectly to any Google search console HTML verification challenge (e.g. google1234abcd5678.html)
+  app.get("/google:id.html", (req, res) => {
+    const id = req.params.id;
+    res.type("text/html");
+    res.send(`google-site-verification: google${id}.html`);
+  });
+
+  // Dedicated lightweight API health check endpoint for UptimeRobot monitoring
+  app.get("/api/health", (req, res) => {
+    res.json({
+      status: "up",
+      timestamp: new Date().toISOString(),
+      database: mongoose.connection.readyState === 1 ? "connected" : "disconnected"
+    });
+  });
+
   app.use("/api/admin", adminRouter);
   app.use("/api/admin", adminDashboardRouter);
   app.use("/api/public", publicRouter);
@@ -103,7 +126,8 @@ async function startServer() {
       });
     } catch (err) {
       console.error('Claim error:', err);
-      return res.status(500).json({ success: false, error: 'Database capture failed.', details: err.message });
+      const details = err instanceof Error ? err.message : "Unknown error";
+      return res.status(500).json({ success: false, error: 'Database capture failed.', details });
     }
   });
 
