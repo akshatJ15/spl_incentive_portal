@@ -70,12 +70,12 @@ async function startServer() {
     res.send("User-agent: *\nDisallow: /\n");
   });
 
-  // Automatic Google Search Console Dynamic HTML Verification
-  // Responds perfectly to any Google search console HTML verification challenge (e.g. google1234abcd5678.html)
-  app.get("/google:id.html", (req, res) => {
-    const id = req.params.id;
+  // 2. Exact-match Google Search Console Verification
+  // CRITICAL: We use an exact path instead of a dynamic wildcard. Wildcard routes return 200 OK
+  // for non-existent paths, which triggers Google's cloaking/hacked warning.
+  app.get("/google5c2a52f28097c3ae.html", (req, res) => {
     res.type("text/html");
-    res.send(`google-site-verification: google${id}.html`);
+    res.send("google-site-verification: google5c2a52f28097c3ae.html");
   });
 
   // Dedicated lightweight API health check endpoint for UptimeRobot monitoring
